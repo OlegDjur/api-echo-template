@@ -29,8 +29,7 @@ func (c *ctrl) CreateUser(ctx echo.Context) error {
 }
 
 func GetUser(c echo.Context) error {
-	catName := c.QueryParam("name")
-	catType := c.QueryParam("type")
+	catName := c.Param("id")
 
 	return c.JSON(http.StatusOK, map[string]string{
 		"name": catName,
