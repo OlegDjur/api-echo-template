@@ -28,7 +28,7 @@ func (r *repository) CreateUser(ctx context.Context, request domain.UserRequest)
 	var response domain.User
 
 	query := `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *`
-	if err := r.db.QueryRow(ctx, query, request.Name, request.Email, request.Password).Scan(&response); err != nil {
+	if err := r.db.QueryRow(ctx, query, request.Name, request.Email, request.Password).Scan(&response.ID, &response.Name, &response.Email, &response.Password); err != nil {
 		return domain.User{}, err
 	}
 
@@ -38,7 +38,7 @@ func (r *repository) CreateUser(ctx context.Context, request domain.UserRequest)
 func (r *repository) GetUser(ctx context.Context, id int) (domain.User, error) {
 	var response domain.User
 
-	if err := r.db.QueryRow(ctx, "SELECT * FROM users WHERE id = $1", id).Scan(&response); err != nil {
+	if err := r.db.QueryRow(ctx, "SELECT * FROM users WHERE id = $1", id).Scan(&response.ID, &response.Name, &response.Email, &response.Password); err != nil {
 		if err == pgx.ErrNoRows {
 			return domain.User{}, ErrUserNotFound
 		}

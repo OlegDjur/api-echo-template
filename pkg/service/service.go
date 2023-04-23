@@ -8,8 +8,8 @@ import (
 )
 
 type Service interface {
-	CreateUser(ctx context.Context, request domain.UserRequest) (domain.UserResponse, error)
-	GetUser(ctx context.Context, request int) (domain.UserRequest, error)
+	CreateUser(ctx context.Context, request domain.UserRequest) (domain.User, error)
+	GetUser(ctx context.Context, request int) (domain.User, error)
 }
 
 type service struct {
@@ -20,10 +20,10 @@ func NewService(repo repository.Repository) *service {
 	return &service{repo: repo}
 }
 
-func (s *service) CreateUser(ctx context.Context, request domain.UserRequest) (domain.UserResponse, error) {
+func (s *service) CreateUser(ctx context.Context, request domain.UserRequest) (domain.User, error) {
 	return s.repo.CreateUser(ctx, request)
 }
 
-func (s *service) GetUser(ctx context.Context, request int) (domain.UserResponse, error) {
+func (s *service) GetUser(ctx context.Context, request int) (domain.User, error) {
 	return s.repo.GetUser(ctx, request)
 }
