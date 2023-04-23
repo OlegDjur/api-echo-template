@@ -4,15 +4,35 @@ import (
 	"echo-template/pkg/domain"
 	"net/http"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
-func CreateUser(c echo.Context) error {
-	var user domain.UserRequest
+type ctrl struct {
+	svc service.Service
+}
 
-	if err := c.Bind(&user); err != nil {
+func (c *ctrl) CreateUser(ctx echo.Context) error {
+	var request domain.UserRequest
+
+	if err := ctx.Bind(&request); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error)
 	}
 
-	return c.JSON(http.StatusOK, user)
+	result, err := c.svc.CreateUser(ctx.Request().Context(), request)
+
+	response := domain.UserResponse{
+		Name:  result.Name,
+		Email: result.Email,
+	}
+
+	return ctx.JSON(http.StatusOK, response)
+}
+
+func GetUser(c echo.Context) error {
+	catName := c.QueryParam("name")
+	catType := c.QueryParam("type")
+
+	return c.JSON(http.StatusOK, map[string]string{
+		"name": catName,
+		"type": catType})
 }
