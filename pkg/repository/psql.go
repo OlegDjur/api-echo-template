@@ -4,8 +4,9 @@ import (
 	"context"
 	"log"
 
+	"echo-template/internal/config"
+
 	"github.com/jackc/pgx/v4/pgxpool"
-	"honnef.co/go/tools/config"
 )
 
 func NewPsqlDB(c config.Config) *pgxpool.Pool {
@@ -13,7 +14,7 @@ func NewPsqlDB(c config.Config) *pgxpool.Pool {
 
 	db, err := pgxpool.Connect(context.Background(), connStr)
 	if err != nil {
-		log.Fatalf("Failed to connect to database:", err)
+		log.Fatalf("Failed to connect to database: %s", err)
 	}
 	defer db.Close()
 
