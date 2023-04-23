@@ -7,9 +7,12 @@ import (
 )
 
 func main() {
-	e := echo.New()
-	e.Logger.Fatal(e.Start(":8080"))
+	ctrl := controller.NewCtrl(svc)
 
-	e.GET("/user/:data", controller.GetUser)
-	e.POST("/user", controller.CreateUser)
+	e := echo.New()
+	e.GET("/users", ctrl.GetUsers)
+	e.GET("/user/:id", ctrl.GetUser)
+	e.POST("/user", ctrl.CreateUser)
+
+	e.Logger.Fatal(e.Start(":8080"))
 }
